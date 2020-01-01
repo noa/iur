@@ -34,7 +34,7 @@ To perform ranking evaluations, `scikit-learn==0.21.3` is required.
 
 We release the data in two formats: (1) in preprocessed binary format suitable for training
 new models with the code released in this repository; and (2) as raw comment IDs along with scripts 
-to download and prepare the data.
+to download and prepare the data from scratch.
 
 **Download links**
 
