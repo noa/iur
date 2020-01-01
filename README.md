@@ -103,7 +103,7 @@ added for readability.
 ```
 
 You should use the keys specified in the Features enum defined in 
-`aid/io.py`, as we have here. Each JSON object should have a unique 
+`aid/features.py`, as we have here. Each JSON object should have a unique 
 "author_id" in the range `0...N-1`, where `N` is the number of authors in 
 this split. The text content of each post should be encoded as a list of 
 integers, with sentencepiece, for example. The length of each encoded 
