@@ -1,0 +1,16 @@
+{
+    "context_features": [
+        "author_id",
+	"num_posts"
+    ],
+    "sequence_features": [
+        "hour",
+        "action_type",
+        "lens",
+        "syms"
+    ],
+    "label_feature": "author_id",
+    "num_symbols": 65536,
+    "num_action_types": 2048,
+    "padded_length": 32
+}
