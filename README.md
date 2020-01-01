@@ -69,11 +69,10 @@ feature, you should also sort the messages by each author by publication
 time. We will refer to the full sorted list of messages by a given 
 author as that author's history.
 
-You'll want to create both a training and evaluation datasets. The 
-evaluation data would typically be future to the training data and 
-contain posts by a larger number of authors. Both splits should be 
-further divided into query and target sub-splits, for a total of four 
-datasets.
+You'll want to create both a training and evaluation datasets. The evaluation
+data would typically be future to the training data. Both splits should be
+further divided into query and target sub-splits, for a total of four datasets,
+in order to support ranking experiments.
 
 For the training splits, take each training author's history and split 
 it into two portions, the first portion contributing to the query 
