@@ -58,7 +58,11 @@ python scripts/fit.py --expt_config_path data/reddit/config.json
 		      --train_tfrecord_path "$DATA/queries.*.tf"
 		      --valid_tfrecord_path "$DATA/targets.*.tf"
 		      --num_classes 120601
+		      --framework custom
 ```
+
+*Note*: the trainer supports both Keras `fit` and a custom
+training loop. We recommend using `--framework custom`.
 
 The optimization and model architecture may be customized by passing
 in various hyperparameters at the command line. We have found the
@@ -157,7 +161,7 @@ shown in the "hour field".
 
 For an example of how to create the JSON files, or if you're only 
 interested in repeating the experiment from the paper, please see 
-expts/reddit/cookUpRedditJSON.py. As suggested by the file name, this 
+`scripts/reddit_preprocess.py`. As suggested by the file name, this 
 program cooks up the JSON file from Reddit data stored locally. We 
 secured this data from BigQuery, which is considerably faster than using 
 the Reddit API directly.
