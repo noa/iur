@@ -61,7 +61,7 @@ python scripts/fit.py --expt_config_path data/reddit/config.json
 		      --framework custom
 ```
 
-*Note*: the trainer supports both Keras `fit` and a custom
+**Note**: the trainer supports both Keras `fit` and a custom
 training loop. We recommend using `--framework custom`.
 
 The optimization and model architecture may be customized by passing
@@ -80,8 +80,6 @@ python scripts/fit.py --flagfile flagfiles/sample.cfg <REMAINING ARGUMENTS>
 We release the data in two formats: (1) in preprocessed binary format suitable for training
 new models with the code released in this repository; and (2) as raw comment IDs along with scripts 
 to download and prepare the data from scratch.
-
-**Download links**
 
 * [Preprocessed data](https://cs.jhu.edu/~noa/data/emnlp2019.tar.gz). The
 preprocessed data is in TFRecord format and divided into training and test
