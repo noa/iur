@@ -1,7 +1,9 @@
-This is the official repository for the EMNLP 2019 paper, "Learning Invariant
-Representations of Social Media Users," by Nicholas Andrews and Marcus Bishop.
-If you use the code or datasets released here in published work, the appropriate
-citation is:
+This is the official repository for the [EMNLP 2019
+paper](https://www.aclweb.org/anthology/D19-1178.pdf), "Learning
+Invariant Representations of Social Media Users," by Nicholas Andrews
+and Marcus Bishop.  If you use the code or datasets released here in
+published work, the appropriate
+[citation](https://www.aclweb.org/anthology/D19-1178.bib) is:
 
 ```
 @inproceedings{andrews-bishop-2019-learning,
@@ -21,14 +23,25 @@ citation is:
 # Package Setup
 
 To train models, you will need TensorFlow `2.0` which you can install
-using `pip install tensorflow{-gpu}`. The Author IDdentification (`aid`)
-package contained in this repository may then be installed using:
+using `pip install tensorflow{-gpu}` and `tqdm`. The Author
+IDdentification (`aid`) package contained in this repository may then
+be installed using:
 
 ```
 python setup.py install
 ```
 
 To perform ranking evaluations, `scikit-learn==0.21.3` is required.
+If you use `conda`, the following commands should be all you need
+to get a working environment:
+
+```bash
+conda create -n iur python=3.7
+conda activate iur
+pip install tensorflow-gpu
+pip install tqdm
+python setup.py install
+```
 
 # Quick Start
 
