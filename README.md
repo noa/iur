@@ -53,7 +53,11 @@ be evaluated using `--mode rank`.
 For example, to fit a new model using the provided Reddit dataset:
 
 ```bash
-python scripts/fit.py --expt_config_path data/reddit/config.json --expt_dir experiment --train_tfrecord_path "$DATA/queries.*.tf" --valid_tfrecord_path "$DATA/targets.*.tf" --num_classes 120601
+python scripts/fit.py --expt_config_path data/reddit/config.json
+                      --expt_dir experiment
+		      --train_tfrecord_path "$DATA/queries.*.tf"
+		      --valid_tfrecord_path "$DATA/targets.*.tf"
+		      --num_classes 120601
 ```
 
 # Reddit Data
