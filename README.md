@@ -40,6 +40,7 @@ conda create -n iur python=3.7
 conda activate iur
 pip install tensorflow-gpu
 pip install tqdm
+pip install scikit-learn
 python setup.py install
 ```
 
