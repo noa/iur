@@ -20,8 +20,8 @@ citation is:
 
 # Package Setup
 
-To train models, you will need TensorFlow `2.1` which you can install
-using `pip install tf-nightly{-gpu}`. The Author IDdentification (`aid`)
+To train models, you will need TensorFlow `2.0` which you can install
+using `pip install tensorflow{-gpu}`. The Author IDdentification (`aid`)
 package contained in this repository may then be installed using:
 
 ```
@@ -29,6 +29,12 @@ python setup.py install
 ```
 
 To perform ranking evaluations, `scikit-learn==0.21.3` is required.
+
+# Quick Start
+
+Use `scripts/fit.py` to train new models. You must supply paths to preprocessed
+data in `TFRecord` format, as described below. Once a model is trained, it may
+be evaluated using `--mode rank`.
 
 # Reddit Data
 
@@ -131,7 +137,3 @@ should specify the location of the JSON files you constructed with the
 file name glob, remembering to quote the whole glob. Finally, you 
 specify the prefix of the names of the output files with the `--tf` 
 option.
-
-# Building Models
-
-**Coming soon!**
