@@ -50,6 +50,12 @@ Use `scripts/fit.py` to train new models. You must supply paths to preprocessed
 data in `TFRecord` format, as described below. Once a model is trained, it may
 be evaluated using `--mode rank`.
 
+For example, to fit a new model using the provided Reddit dataset:
+
+```bash
+python scripts/fit.py --expt_config_path data/reddit/config.json --expt_dir experiment --train_tfrecord_path "$DATA/queries.*.tf" --valid_tfrecord_path "$DATA/targets.*.tf" --num_classes 120601
+```
+
 # Reddit Data
 
 We release the data in two formats: (1) in preprocessed binary format suitable for training
