@@ -60,6 +60,17 @@ python scripts/fit.py --expt_config_path data/reddit/config.json
 		      --num_classes 120601
 ```
 
+The optimization and model architecture may be customized by passing
+in various hyperparameters at the command line. We have found the
+model to be fairly robust across different datasets, but better
+performance can usually be obtained with some fine-tuning. To get
+started, we provide an example set of flags in `flagfiles/sample.cfg`.
+You can pass this to the trainer directly:
+
+```bash
+python scripts/fit.py --flagfile flagfiles/sample.cfg <REMAINING ARGUMENTS>
+```
+
 # Reddit Data
 
 We release the data in two formats: (1) in preprocessed binary format suitable for training
