@@ -22,15 +22,15 @@ published work, the appropriate
 
 # Package Setup
 
-To train models, you will need TensorFlow `2.0` which you can install
-using `pip install tensorflow{-gpu}` and `tqdm`. The Author
+To train models, you will need TensorFlow `2.0` and `tqdm`, which you can install
+using `pip install tensorflow{-gpu} tqdm`. The Author
 IDdentification (`aid`) package contained in this repository may then
-be installed using:
+be installed by executing the command
 
 ```
 python setup.py install
 ```
-
+within the root directory of this repository.
 To perform ranking evaluations, `scikit-learn==0.21.3` is required.
 If you use `conda`, the following commands should be all you need
 to get a working environment:
@@ -48,7 +48,7 @@ python setup.py install
 
 Use `scripts/fit.py` to train new models. You must supply paths to preprocessed
 data in `TFRecord` format, as described below. Once a model is trained, it may
-be evaluated using `--mode rank`.
+be evaluated using the same script with the `--mode rank` flag.
 
 For example, to fit a new model using the provided Reddit dataset:
 
@@ -60,20 +60,24 @@ python scripts/fit.py --expt_config_path data/reddit/config.json
 		      --num_classes 120601
 		      --framework custom
 ```
+This assumes you have downloaded the dataset from
+`https://cs.jhu.edu/~noa/data/emnlp2019.tar.gz` into a directory called DATA.
+Note the quotes around the data paths, which are intended to prevent
+the expansion of the glob by the shell.
 
-**Note**: the trainer supports both Keras `fit` and a custom
-training loop. We recommend using `--framework custom`.
+**Note**: `fit.py` supports two different training frameworks,
+one based on the Keras `fit` method, and custom framework
+that provides more user feedback, including periodic ranking experiments
+to help gauge training progress. We recommend using the custom
+framework, as shown in the command above.
 
 The optimization and model architecture may be customized by passing
 in various hyperparameters at the command line. We have found the
 model to be fairly robust across different datasets, but better
 performance can usually be obtained with some fine-tuning. To get
 started, we provide an example set of flags in `flagfiles/sample.cfg`.
-You can pass this to the trainer directly:
-
-```bash
-python scripts/fit.py --flagfile flagfiles/sample.cfg <REMAINING ARGUMENTS>
-```
+You can pass this to `fit.py` directly by introducing the flag
+`--flagfile flagfiles/sample.cfg` in the command above.
 
 # Reddit Data
 
@@ -86,19 +90,21 @@ preprocessed data is in TFRecord format and divided into training and test
 splits, each divided into queries and targets.
 
 * [Raw comment IDs](https://cs.jhu.edu/~noa/data/reddit.tar.gz). We provide a
-script to download and prepare the data into the TFRecord format in
+script to download, preprocdses, and store the same data the TFRecord format in
 `data/reddit/download_and_prepare.sh`.
-
-# Preparing New Data from Scratch
-
-The simplest way to start is to adapt the process laid out in
-`data/reddit/download_and_prepare.sh` for Reddit to your data source. The
-remainder of this section describes what that would entail.
 
 **Note**: To run the script above, you will need some additional packages,
 namely `sentencepiece==0.1.82`, `pandas==0.25.2`, and a recent version of the
 Google Cloud Python API to download data from BigQuery. You will also need
 to export the environment variables listed at the top of the script.
+We secure Reddit data from BigQuery, which is considerably faster than using 
+the Reddit API directly.
+
+# Preparing New Data from Scratch
+
+The simplest way to start is to adapt the process laid out in the script
+`data/reddit/download_and_prepare.sh` mentioned above to your data source. The
+remainder of this section describes what that would entail.
 
 First you'll want to assemble all the data you plan to use to train and 
 evaluate the model. This would typically include dozens of short 
@@ -132,7 +138,9 @@ correspondence between the IDs you assign to the training authors and
 those you assign to the evaluation authors.
 
 Next you need to store each of the four splits in JSON format, with one 
-author history per line. You can use several files for manageability. 
+author history per line. You can store each split in several files
+to avail of TensorFlow's highly optimized data reading mechanism,
+and also to make the dataset less unwieldy.
 Each line should look like the following, but without the newlines we 
 added for readability.
 
@@ -147,22 +155,15 @@ added for readability.
 
 You should use the keys specified in the Features enum defined in 
 `aid/features.py`, as we have here. Each JSON object should have a unique 
-"author_id" in the range `0...N-1`, where `N` is the number of authors in 
+`author_id` in the range `0...N-1`, where `N` is the number of authors in 
 this split. The text content of each post should be encoded as a list of 
 integers, with sentencepiece, for example. The length of each encoded 
-post should appear in the "lens" field. The encoded posts themselves 
-should be concatenated and stored in the "syms" field. If using a 
+post should appear in the `lens` field. The encoded posts themselves 
+should be concatenated and stored in the `syms` field. If using a 
 categorical feature of each post, such as subreddit, those can be stored 
 in the action_type field. Finally, this example also uses the hour of 
 the day of the publication time of each post as a feature. These are 
-shown in the "hour field".
-
-For an example of how to create the JSON files, or if you're only 
-interested in repeating the experiment from the paper, please see 
-`scripts/reddit_preprocess.py`. As suggested by the file name, this 
-program cooks up the JSON file from Reddit data stored locally. We 
-secured this data from BigQuery, which is considerably faster than using 
-the Reddit API directly.
+shown in the `hour` field.
 
 For efficiency, the JSON file(s) should be converted to TFRecords using
 `scripts/json2tf.py`. You should run this program once of each of 
