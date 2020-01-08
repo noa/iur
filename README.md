@@ -60,8 +60,9 @@ python scripts/fit.py --expt_config_path data/reddit/config.json
 		      --num_classes 120601
 		      --framework custom
 ```
-This assumes you have downloaded the dataset from
-`https://cs.jhu.edu/~noa/data/emnlp2019.tar.gz` into a directory called DATA.
+This assumes your preprocessed data is located in directory 
+specified by the environment variable `$DATA` matching the 
+given file pattern.
 Note the quotes around the data paths, which are intended to prevent
 the expansion of the glob by the shell.
 
@@ -107,10 +108,11 @@ The simplest way to start is to adapt the process laid out in the script
 remainder of this section describes what that would entail.
 
 First you'll want to assemble all the data you plan to use to train and 
-evaluate the model. This would typically include dozens of short 
-documents composed by around 100,000 authors, each document including 
+evaluate the model. In our experiments in the paper, this involves dozens of short 
+documents composed by around 100,000 different authors. However, we have also successfully trained models with fewer authors. Each document including 
 text content and any associated meta-data you think will help 
-distinguish authors. For example, in our Reddit experiment, the 
+distinguish authors. 
+For example, in our Reddit experiment, the 
 documents are posts and the meta-data includes the publication time of 
 each post and the subreddit to which each post was published. You need 
 to organize your data by author, and if using publication time as a 
