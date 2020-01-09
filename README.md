@@ -93,6 +93,11 @@ started, we provide an example set of flags in
 introducing the flag `--flagfile flagfiles/sample.cfg` in the command 
 above.
 
+**Note**: When evaluating a trained model using `--mode rank`, the
+hyperparameters must be the same as were used when training the
+model. This can be accomplished, for example, by using the same flag
+file.
+
 # Reddit Data
 
 We release the data in two formats: (1) in preprocessed binary format 
