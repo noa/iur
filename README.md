@@ -200,9 +200,9 @@ JSON files, you can use a file name glob, remembering to quote the
 whole glob. Finally, you specify the prefix of the names of the 
 output files with the `--tf` option.
 
-**Note**: In our experiments, we used fairly aggressive truncation on
-the length of each individual comment (truncating to 32 subwords) and
-relatively short episodes (up to length 16). With less truncation and
-longer episodes, we expect the quality of the embeddings to improve,
-but it will be more computationally expensive to train the model and
-produce embeddings at inference time.
+**Note**: For computational expediency, we truncate the length of each
+individual comment to 32 subwords and consider only short episodes up
+to length 16. However, with less truncation and longer episodes, we
+expect the quality of the embeddings to improve, at the cost of
+requiring more computational resources to train the model and produce
+embeddings at inference time.
