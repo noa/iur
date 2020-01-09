@@ -199,3 +199,9 @@ constructed with the `--json` option. If you opted to create multiple
 JSON files, you can use a file name glob, remembering to quote the 
 whole glob. Finally, you specify the prefix of the names of the 
 output files with the `--tf` option.
+
+**Note**: In our experiments, we used fairly aggressive truncation on
+the length of each individual comment (truncating to 32 subwords) and
+relatively short episodes (up to length 16). With less truncation and
+longer episodes, the quality of the embeddings will likely improve but
+it will be more computationally expensive to train the model.
