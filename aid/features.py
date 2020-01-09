@@ -343,61 +343,6 @@ def tfrecord_dataset(input_file_pattern, config, compression_type=None):
     num_parallel_calls=tf.data.experimental.AUTOTUNE)
 
 
-def random_episode_from_tfrecord(dataset, config,
-                                 min_episode_length=1,
-                                 max_episode_length=16):
-  """
-  Arguments
-    dataset: tf.data.Dataset instance
-    config: FeatureConfig class instance
-    min_episode_length (1): Minimum episode length.
-    max_episode_length (16): Maximum episode length.
-
-  Returns: tf.data.Dataset
-
-  """
-  def sample_episode(features, label):
-    if min_episode_length == max_episode_length:
-      length = min_episode_length
-    else:
-      raise NotImplementedError
-    num_action = features[F.NUM_POSTS.value]
-    maxval = num_action - length + 1
-    start_index = tf.reshape(
-      tf.random.uniform([1], minval=0, maxval=maxval,
-                        dtype=tf.dtypes.int64), [])
-    end_index = start_index + length
-    features[F.NUM_POSTS.value] = length  # length of episode
-    for key in config.sequence_features:
-      key = key.value
-      features[key] = features[key][start_index:end_index]
-      #features[key] = tf.reshape(
-      #  features[key], [length])
-
-    return features, label
-
-  return dataset.map(
-    sample_episode,
-    num_parallel_calls=tf.data.experimental.AUTOTUNE)
-
-
-def print_tfrecords(input_file_pattern, config, compression_type=None,
-                    n_to_print=1):
-  """ Arguments
-    input_file_pattern: Regex matching input tfrecord files.
-    config: `FeatureConfig` instance.
-    compression_type (None): File compression type
-    n_to_print: How many examples to print.
-
-  """
-  if not tf.executing_eagerly():
-    tf.enable_eager_execution()
-  dataset = tfrecord_dataset(
-    input_file_pattern, config, compression_type=compression_type)
-  for example in dataset.take(n_to_print):
-    print(example)
-
-
 def write_tfrecords_from_generator(tfrecord_path, setting, generator,
                                    shard_size=5000):
   """ Arguments
