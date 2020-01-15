@@ -98,10 +98,11 @@ hyperparameters must be the same as were used when training the
 model. This can be accomplished, for example, by using the same flag
 file.
 
-If you simply wish to produce vector embeddings, use `--mode embed`
-which will produce embeddings of data contained in the TFRecords
-specified with the `--train_tfrecord_path` flag. The model is
-specified using `--expt_dir` and the remaining flags should match
+If you want to directly manipulate vector embeddings, for example for
+visualization or for other kinds of evaluations than ranking, use
+`--mode embed` which will produce embeddings of data contained in the
+TFRecords specified with the `--train_tfrecord_path` flag. The model
+is specified using `--expt_dir` and the remaining flags should match
 those used to train the model (which you can ensure by using the same
 flag file). The resulting embeddings are written in `numpy` format to
 `--output_embed_path`. Note that it is important that the data is
