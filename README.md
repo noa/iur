@@ -159,35 +159,32 @@ you should also sort the messages of each author by publication
 time. We will refer to the full sorted list of messages by a given 
 author as that author's *history*.
 
-Next you'll need to decide which data splits to construct, which 
-will depend on the problem you're trying to solve. These include a 
-*training* and an optional *vailidation* dataset, to be used to
-train the model, and optionally a further training and validation
-set to be used to evaluate the model, for a total of four possible 
-datasets.
+Next you'll need to decide which data splits to construct, which will depend on
+the problem you're trying to solve. These include at a minimum a *training*
+dataset used to fit the model parameters. To monitor training progress, you'll
+want a *validation* dataset. Finally, to test the model performance you'll want
+a test dataset which should not be seen at training time.
 
-At a minimum you'll need a *training* dataset, which you specify to 
-`scripts/fit.py` with the `--train_tfrecord_path` flag. Then you 
-can train using the flag `--framework fit`, which will simply 
-minimize classification error with respect to the the *closed set* 
-of authors present in your dataset. You'll also need to specify the 
-number of authors `N` using the flag `--num-classes N`. The 
-training dataset should consist of the full histories of the `N` 
-authors. Additionally, each author should be assigned an 
-`author_id` in the range `0..N-1`.
+The training dataset is specified in `scripts/fit.py` with the
+`--train_tfrecord_path` flag. Then you can train using the flag `--framework
+fit`, which will simply minimize the loss with respect to the the *closed set*
+of authors present in your dataset. You'll also need to specify the number of
+authors `N` using the flag `--num-classes N`. The training dataset should
+consist of the full histories of the `N` authors. Additionally, each author
+should be assigned an `author_id` in the range `0..N-1`. However, we recommend
+also using a validation dataset via `--valid_tfrecord_path` and using
+`--framework custom` which estimates model performance during training.
 
-Now in case you are interested in identifying authors who were not 
-present in your training dataset, the method just described will be 
-insufficient, because it calculates a probability distribution over 
-the authors in the training set. Indeed, knowing the probability 
-that an episode was composed by one of your training authors 
-doesn't help you when you know the author to not be among them! 
-Fortunately, although the model is trained to minimize 
-classification error with respect to the fixed set of authors, it 
-internally constructs an *embedding* of an episode, irrespective of 
-its author, which can be used to assess authorship. Specifically, 
-episodes by the same author will nearby in space, while episodes by 
-different authors will be further apart.
+Now in case you are interested in identifying authors who were not present in
+your training dataset, the method just described will be insufficient, because
+it calculates a probability distribution over the authors in the training set.
+Indeed, knowing the probability that an episode was composed by one of your
+training authors doesn't help you when you know the author to not be among them!
+Fortunately, although the model is trained to minimize a loss with respect to
+the fixed set of authors, it internally constructs an *embedding* of an episode,
+irrespective of its author, which can be used to assess authorship.
+Specifically, episodes by the same author will nearby in space, while episodes
+by different authors will be further apart.
 
 Our primary method of assessing the ability to detect 
 same-authorship is formalized by a *ranking experiment*. To conduct 
