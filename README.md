@@ -123,57 +123,102 @@ which is considerably faster than using the Reddit API directly.
 # Preparing New Data from Scratch
 
 The simplest way to start is to adapt the process laid out in the 
-script `data/reddit/download_and_prepare.sh` mentioned above to your 
-data source. The remainder of this section describes what that would 
-entail.
+script `data/reddit/download_and_prepare.sh` mentioned above to 
+your data source. The remainder of this section describes what that 
+would entail.
 
 First you'll want to assemble all the data you plan to use to train 
 and evaluate the model. In our experiments in the paper, this 
 involves dozens of short documents composed by around 100,000 
-different authors. However, we have also successfully trained models 
-with fewer authors. Each document including text content and any 
-associated meta-data you think will help distinguish authors. For 
-example, in our Reddit experiment, the documents are posts and the 
-meta-data includes the publication time of each post and the 
-subreddit to which each post was published. You need to organize your 
-data by author, and if using publication time as a feature, you 
-should also sort the messages by each author by publication time. We 
-will refer to the full sorted list of messages by a given author as 
-that author's history.
+different authors. However, we have also successfully trained 
+models with fewer authors. Each document including text content and 
+any associated meta-data you think will help distinguish authors. 
+For example, in our Reddit experiment, the documents are posts and 
+the meta-data includes the publication time of each post and the 
+subreddit to which each post was published. You need to organize 
+your data by author, and if using publication time as a feature, 
+you should also sort the messages of each author by publication 
+time. We will refer to the full sorted list of messages by a given 
+author as that author's *history*.
 
-You'll want to create both a training and evaluation datasets. The 
-evaluation data would typically be future to the training data. Both 
-splits should be further divided into query and target sub-splits, 
-for a total of four datasets, in order to support ranking 
-experiments.
+Next you'll need to decide which data splits to construct, which 
+will depend on the problem you're trying to solve. These include a 
+*training* and an optional *vailidation* dataset, to be used to
+train the model, and optionally a further training and validation
+set to be used to evaluate the model, for a total of four possible 
+datasets.
 
-For the training splits, take each training author's history and 
-split it into two portions, the first portion contributing to the 
-query sub-split, and the second portion to the target sub-split. 
-Since the targets are typically future to the queries, a simple way 
-to divide the history is to take the first half of the posts to 
-comprise the query, and the last half to comprise the target. You 
-also need to assign author IDs to each author in the range `0..N-1`, 
-where `N` is the number of training authors.
+At a minimum you'll need a *training* dataset, which you specify to 
+`scripts/fit.py` with the `--train_tfrecord_path` flag. Then you 
+can train using the flag `--framework fit`, which will simply 
+minimize classification error with respect to the the *closed set* 
+of authors present in your dataset. You'll also need to specify the 
+number of authors `N` using the flag `--num-classes N`. The 
+training dataset should consist of the full histories of the `N` 
+authors. Additionally, each author should be assigned an 
+`author_id` in the range `0..N-1`.
 
-You should construct the evaluation sub-splits in the same way, 
-although the number of authors can be different, and there need not 
-be any correspondence between the IDs you assign to the training 
-authors and those you assign to the evaluation authors.
+Now in case you are interested in identifying authors who were not 
+present in your training dataset, the method just described will be 
+insufficient, because it calculates a probability distribution over 
+the authors in the training set. Indeed, knowing the probability 
+that an episode was composed by one of your training authors 
+doesn't help you when you know the author to not be among them! 
+Fortunately, although the model is trained to minimize 
+classification error with respect to the fixed set of authors, it 
+internally constructs an *embedding* of an episode, irrespective of 
+its author, which can be used to assess authorship. Specifically, 
+episodes by the same author will nearby in space, while episodes by 
+different authors will be further apart.
 
-Next you need to store each of the four splits in JSON format, with 
+Our primary method of assessing the ability to detect 
+same-authorship is formalized by a *ranking experiment*. To conduct 
+the experiment periodically during training to monotor progress, 
+you use the flag `--framework custom` to `scripts/fit.py` and 
+supply a validation dataset with the `--valid-tfrecored-path`. This 
+dataset should consist of episodes by exactly the same `N` authors 
+comprising the training set, with each episode assigned the same 
+`author_id` as the episode by the corresponding author in the 
+training set.
+
+In effect, the ranking experiment consists of matching the training 
+episodes with the corresponding validation episodes. The success of 
+the experiment is measured by a number of metrics, such as *median 
+rank*, which should be a small integer, and *mean recripricol 
+rank*, which lies in the range `0..1` with larger values 
+corresponding with better performance.
+
+A simple way to constuct training and validation splits is to 
+simply divide each author's cronologically sorted history in the 
+middle, the first portion contributing to the training split, and 
+the remainder to the validation split. In this way, the validation 
+episodes will be *future* to the training episodes, so the success 
+of the experiment will illustrate that the model generalizes well 
+to future data.
+
+If desired, you can test the model after training by calling 
+`scripts/fit.py` with the `--mode rank` flag, now specifying a 
+further training and validation set. The authors and the number of 
+authors in these testing datasets may be different than those used 
+for training, and there need not be any correspondence between the 
+`author_id`s you assign to the training authors and those you 
+assign to the testing authors.
+
+# Data format
+
+You need to store each of the desired splits in JSON format, with 
 one author history per line. You can store each split in several 
 files to avail of TensorFlow's highly optimized data reading 
 mechanism, and also to make the dataset less unwieldy. Each line 
-should look like the following, but without the newlines we added for 
-readability.
+should look like the following, but without the newlines we added 
+for readability.
 
 ```json
 { "author_id" : 0,
   "lens" : [1,2,,...],
-  "syms" : [3,4,...],
-  "action_type" : [5,6,...], 
-  "hour" : [7,8,...]
+  "syms" : [[3,4,...],[5,6,...],...],
+  "action_type" : [7,8,...], 
+  "hour" : [9,10,...]
 }
 ```
 
