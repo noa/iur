@@ -45,8 +45,10 @@ from aid.evaluation import ranking
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_enum('mode', 'fit', ['fit', 'rank'],
-                  'Use `fit` to train model or `rank` to evaluate it')
+flags.DEFINE_enum('mode', 'fit', ['fit', 'rank', 'embed'],
+                  ('Use `fit` to train model, `rank` to evaluate it, '
+                   'or `embed` to produce vector embeddings using '
+                   'a trained model'))
 flags.DEFINE_enum('framework', 'fit', ['fit', 'custom'], 'Framework')
 flags.DEFINE_string('expt_dir', None, 'Experiment directory')
 flags.DEFINE_string('results_filename', 'results.txt', 'Written as expt_dir/results_filename')
@@ -95,6 +97,7 @@ flags.DEFINE_integer('num_parallel_readers', 4, 'Number of files to read in para
 flags.DEFINE_integer('shuffle_seed', 42, 'Seed for data shuffle')
 flags.DEFINE_integer('shuffle_buffer_size', 2**13, 'Size of shufle buffer')
 flags.DEFINE_string('distance', 'cosine', 'How to compare embeddings')
+flags.DEFINE_string('output_embed_path', 'embed.npy', 'Output path for `embed` mode')
 
 
 def get_flagfile():
@@ -483,6 +486,18 @@ def main(argv):
     logging.info(results)
     with open(results_file, 'w') as fh:
       fh.write(results)
+
+  if FLAGS.mode == 'embed':
+    export_dir = get_export_dir()
+    logging.info(f"Loading embedding from {export_dir}")
+    embedding = load_embedding(config, export_dir)
+    logging.info(f"Producing embeddings of data: {FLAGS.train_tfrecord_path}")
+    vectors, _ = embedding_and_labels(embedding, FLAGS.train_tfrecord_path, config,
+                                      random_episode=False)
+    shape = vectors.shape
+    logging.info((f"Writing {shape[0]} embeddings of size {shape[1]}"
+                  f" to {FLAGS.output_embed_path}"))
+    np.save(FLAGS.output_embed_path, vectors)
 
 
 if __name__ == '__main__':
