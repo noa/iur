@@ -106,7 +106,13 @@ those used to train the model (which you can ensure by using the same
 flag file). The resulting embeddings are written in `numpy` format to
 `--output_embed_path`. Note that it is important that the data is
 preprocessed using the same pipeline as was used to train the model.
-For example, use the same subword vocabulary.
+For example, use the same subword vocabulary. Finally, the TFRecords
+should contain exactly the episodes you wish to embed, and they should
+be of the same length as was used to train the model
+(`--episode_len`). We have not yet explored the variable-length
+episode setting, but we suspect that sampling episodes of different
+length during training would be sufficient to produce models capable
+of handling variable-length episodes at test time.
 
 
 # Reddit Data
