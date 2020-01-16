@@ -128,8 +128,7 @@ preprocessed data is in TFRecord format and divided into training and test
 splits, each divided into queries and targets.
 
 * [Raw comment IDs](https://cs.jhu.edu/~noa/data/reddit.tar.gz). We 
-provide a script to download, preprocess, and store the same data the 
-TFRecord format in `data/reddit/download_and_prepare.sh`.
+provide a script to download and preprocess the raw comment IDs: `data/reddit/download_and_prepare.sh`.
 
 **Note**: To run the script above, you will need some additional 
 packages, namely `sentencepiece==0.1.82`, `pandas==0.25.2`, and a 
