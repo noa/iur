@@ -211,13 +211,13 @@ episodes will be *future* to the training episodes, so the success
 of the experiment will illustrate that the model generalizes well 
 to future data.
 
-If desired, you can test the model after training by calling 
-`scripts/fit.py` with the `--mode rank` flag, now specifying a 
-further training and validation set. The authors and the number of 
-authors in these testing datasets may be different than those used 
-for training, and there need not be any correspondence between the 
-`author_id`s you assign to the training authors and those you 
-assign to the testing authors.
+If desired, you can test the model after training by calling `scripts/fit.py`
+with the `--mode rank` flag. For purposes of these ranking experiments, the test
+data must be split into queries and targets, with the targets usually chosen to
+be future to the queries. The authors and the number of authors in these testing
+datasets may be different than those used for training, and there need not be
+any correspondence between the `author_id`s you assign to the training authors
+and those you assign to the testing authors.
 
 # Data format
 
