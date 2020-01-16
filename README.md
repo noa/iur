@@ -176,7 +176,7 @@ Our primary method of assessing the ability to detect
 same-authorship is formalized by a *ranking experiment*. To conduct 
 the experiment periodically during training to monitor progress, 
 you use the flag `--framework custom` to `scripts/fit.py` and 
-supply a validation dataset with the `--valid-tfrecored-path`. This 
+supply a validation dataset with the `--valid-tfrecord-path`. This 
 dataset should consist of episodes by exactly the same `N` authors 
 comprising the training set, with each episode assigned the same 
 `author_id` as the episode by the corresponding author in the 
