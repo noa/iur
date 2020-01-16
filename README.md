@@ -170,9 +170,7 @@ fit`, which will simply minimize the loss with respect to the the *closed set*
 of authors present in your dataset. You'll also need to specify the number of
 authors `N` using the flag `--num-classes N`. The training dataset should
 consist of the full histories of the `N` authors. Additionally, each author
-should be assigned an `author_id` in the range `0..N-1`. However, we recommend
-also using a validation dataset via `--valid_tfrecord_path` and using
-`--framework custom` which estimates model performance during training.
+should be assigned an `author_id` in the range `0..N-1`. 
 
 Our primary method of assessing the ability to detect 
 same-authorship is formalized by a *ranking experiment*. To conduct 
