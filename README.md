@@ -187,7 +187,7 @@ by different authors will be further apart.
 
 Our primary method of assessing the ability to detect 
 same-authorship is formalized by a *ranking experiment*. To conduct 
-the experiment periodically during training to monotor progress, 
+the experiment periodically during training to monitor progress, 
 you use the flag `--framework custom` to `scripts/fit.py` and 
 supply a validation dataset with the `--valid-tfrecored-path`. This 
 dataset should consist of episodes by exactly the same `N` authors 
