@@ -174,17 +174,6 @@ should be assigned an `author_id` in the range `0..N-1`. However, we recommend
 also using a validation dataset via `--valid_tfrecord_path` and using
 `--framework custom` which estimates model performance during training.
 
-Now in case you are interested in identifying authors who were not present in
-your training dataset, the method just described will be insufficient, because
-it calculates a probability distribution over the authors in the training set.
-Indeed, knowing the probability that an episode was composed by one of your
-training authors doesn't help you when you know the author to not be among them!
-Fortunately, although the model is trained to minimize a loss with respect to
-the fixed set of authors, it internally constructs an *embedding* of an episode,
-irrespective of its author, which can be used to assess authorship.
-Specifically, episodes by the same author will nearby in space, while episodes
-by different authors will be further apart.
-
 Our primary method of assessing the ability to detect 
 same-authorship is formalized by a *ranking experiment*. To conduct 
 the experiment periodically during training to monitor progress, 
