@@ -185,7 +185,7 @@ training set.
 In effect, the ranking experiment consists of matching the training 
 episodes with the corresponding validation episodes. The success of 
 the experiment is measured by a number of metrics, such as *median 
-rank*, which should be a small integer, and *mean recripricol 
+rank*, which should be a small integer, and *mean reciprocal 
 rank*, which lies in the range `0..1` with larger values 
 corresponding with better performance.
 
