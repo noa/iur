@@ -186,11 +186,11 @@ In effect, the ranking experiment consists of matching the training
 episodes with the corresponding validation episodes. The success of 
 the experiment is measured by a number of metrics, such as *median 
 rank*, which should be a small integer, and *mean reciprocal 
-rank*, which lies in the range `0..1` with larger values 
+rank*, which lies in the range `[0, 1]` with larger values 
 corresponding with better performance.
 
 A simple way to constuct training and validation splits is to 
-simply divide each author's cronologically sorted history in the 
+simply divide each author's chronologically sorted history in the 
 middle, the first portion contributing to the training split, and 
 the remainder to the validation split. In this way, the validation 
 episodes will be *future* to the training episodes, so the success 
