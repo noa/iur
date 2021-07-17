@@ -26,6 +26,10 @@ to identify authors from their posts. In fact, Author IDentification
 (`aid`) is the basis on which the representation is trained and is 
 therefore the name of the Python module included in this repository.
 
+**Update (15 May 2021)**: Please see our latest work:
+* Paper: https://arxiv.org/abs/2105.07263
+* Updated code / data available at: https://github.com/noa/naacl2021
+
 # Package Setup
 
 To train the representation , you will need TensorFlow `2.0` and 
