@@ -30,6 +30,8 @@ therefore the name of the Python module included in this repository.
 * Paper: https://arxiv.org/abs/2105.07263
 * Updated code / data available at: https://github.com/noa/naacl2021
 
+For the latest related work, please see: https://cs.jhu.edu/~noa
+
 # Package Setup
 
 To train the representation , you will need TensorFlow `2.0` and 
